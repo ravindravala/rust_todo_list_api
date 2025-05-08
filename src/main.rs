@@ -60,6 +60,9 @@ struct ApiDoc;
 async fn main() -> std::io::Result<()> {
     let todos = web::Data::new(Mutex::new(Vec::<Todo>::new()));
 
+    let port = "8080".to_string(); // default to 8080
+    let address = format!("0.0.0.0:{}", port);
+
     HttpServer::new(move || {
         App::new()
             .app_data(todos.clone())
@@ -70,7 +73,7 @@ async fn main() -> std::io::Result<()> {
             .route("/todos", web::get().to(get_todos))
             .route("/todos", web::post().to(add_todo))
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(address)?
     .run()
     .await
 }
