@@ -12,3 +12,5 @@ tokio = { version = "1", features = ["full"] }
 
 utoipa = { version = "4", features = ["actix_extras", "uuid"] }
 utoipa-swagger-ui = { version = "4", features = ["actix-web"] }
+
+dotenv = "0.15"

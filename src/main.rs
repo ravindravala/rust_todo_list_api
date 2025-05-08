@@ -3,6 +3,9 @@ use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
 use uuid::Uuid;
 
+use std::env;
+use dotenv::dotenv;
+
 use utoipa::OpenApi;
 use utoipa::ToSchema;
 use utoipa_swagger_ui::SwaggerUi;
@@ -60,8 +63,13 @@ struct ApiDoc;
 async fn main() -> std::io::Result<()> {
     let todos = web::Data::new(Mutex::new(Vec::<Todo>::new()));
 
-    let port = "8080".to_string(); // default to 8080
+    dotenv().ok();
+
+    // Check if we have the PORT environment variable set (for Render or Docker)
+    let port = env::var("PORT").unwrap_or_else(|_| "8080".to_string()); // fallback to 8080 for local
     let address = format!("0.0.0.0:{}", port);
+
+    println!("Starting server on {}", address);
 
     HttpServer::new(move || {
         App::new()
